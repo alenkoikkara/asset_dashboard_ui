@@ -7,9 +7,9 @@ import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 const SENTIMENT_STYLE: Record<string, string> = {
-  bullish: 'bg-green-500 text-white hover:bg-green-500',
-  bearish: 'bg-red-500 text-white hover:bg-red-500',
-  neutral: 'bg-gray-400 text-white hover:bg-gray-400',
+  bullish: 'bg-green-500/20 text-green-400 hover:bg-green-500/20',
+  bearish: 'bg-red-500/20 text-red-400 hover:bg-red-500/20',
+  neutral: 'bg-muted text-muted-foreground hover:bg-muted',
 }
 
 interface Props {
@@ -48,7 +48,7 @@ export default function HoldingDetail({ symbol, summary }: Props) {
         </div>
         <div>
           <div className="text-xs text-muted-foreground">P&L</div>
-          <div className={cn('font-semibold tabular-nums', pnlPositive ? 'text-green-600' : 'text-red-500')}>
+          <div className={cn('font-semibold tabular-nums', pnlPositive ? 'text-green-400' : 'text-red-400')}>
             {fmtINR(summary.total_unrealized_pnl)} ({fmtPct(summary.total_unrealized_pnl_pct)})
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function HoldingDetail({ symbol, summary }: Props) {
                     <TableCell
                       className={cn(
                         'text-right tabular-nums',
-                        b.unrealized_pnl >= 0 ? 'text-green-600' : 'text-red-500',
+                        b.unrealized_pnl >= 0 ? 'text-green-400' : 'text-red-400',
                       )}
                     >
                       {fmtINR(b.unrealized_pnl)}
@@ -91,7 +91,7 @@ export default function HoldingDetail({ symbol, summary }: Props) {
                     <TableCell
                       className={cn(
                         'text-right tabular-nums',
-                        b.unrealized_pnl_pct >= 0 ? 'text-green-600' : 'text-red-500',
+                        b.unrealized_pnl_pct >= 0 ? 'text-green-400' : 'text-red-400',
                       )}
                     >
                       {fmtPct(b.unrealized_pnl_pct)}
@@ -144,7 +144,7 @@ export default function HoldingDetail({ symbol, summary }: Props) {
         <div
           className={cn(
             'text-sm font-medium',
-            first.day_change_pct >= 0 ? 'text-green-600' : 'text-red-500',
+            first.day_change_pct >= 0 ? 'text-green-400' : 'text-red-400',
           )}
         >
           Day change: {fmtPct(first.day_change_pct)}
@@ -159,8 +159,8 @@ export default function HoldingDetail({ symbol, summary }: Props) {
             {aiRow.ai_sentiment && (
               <Badge
                 className={cn(
-                  'text-xs uppercase',
-                  SENTIMENT_STYLE[aiRow.ai_sentiment] ?? 'bg-gray-400 text-white',
+                  'text-xs uppercase border-0',
+                  SENTIMENT_STYLE[aiRow.ai_sentiment] ?? 'bg-muted text-muted-foreground',
                 )}
               >
                 {aiRow.ai_sentiment}
@@ -178,15 +178,15 @@ export default function HoldingDetail({ symbol, summary }: Props) {
         (first.next_dividend_date && first.next_dividend_amount)) && (
         <>
           <Separator />
-          <div className="rounded-md bg-muted px-3 py-2 text-sm space-y-1">
+          <div className="rounded-md bg-accent px-3 py-2 text-sm space-y-1">
             {first.next_earnings_date && (
               <div>
-                📅 Earnings: <strong>{first.next_earnings_date}</strong>
+                Earnings: <strong>{first.next_earnings_date}</strong>
               </div>
             )}
             {first.next_dividend_date && first.next_dividend_amount && (
               <div>
-                💰 Dividend: <strong>{first.next_dividend_date}</strong> — ₹
+                Dividend: <strong>{first.next_dividend_date}</strong> — ₹
                 {first.next_dividend_amount}
               </div>
             )}

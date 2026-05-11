@@ -94,7 +94,7 @@ export default function HoldingsList({
           return (
             <Card key={h.symbol} className="overflow-hidden">
               <div
-                className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-muted/40 transition-colors"
+                className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-accent/40 transition-colors"
                 onClick={() => setExpanded(isOpen ? null : h.symbol)}
               >
                 <div className="flex items-center gap-2 min-w-0">
@@ -116,10 +116,10 @@ export default function HoldingsList({
                   </span>
                   <Badge
                     className={cn(
-                      'min-w-[72px] justify-center text-xs tabular-nums',
+                      'min-w-[72px] justify-center text-xs tabular-nums border-0',
                       pnlPositive
-                        ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                        : 'bg-red-100 text-red-700 hover:bg-red-100',
+                        ? 'bg-green-500/15 text-green-400 hover:bg-green-500/15'
+                        : 'bg-red-500/15 text-red-400 hover:bg-red-500/15',
                     )}
                   >
                     {fmtPct(h.total_unrealized_pnl_pct)}
@@ -133,7 +133,7 @@ export default function HoldingsList({
               </div>
 
               {isOpen && (
-                <CardContent className="pt-0 px-4 pb-4 border-t">
+                <CardContent className="pt-0 px-4 pb-4 border-t border-border">
                   <HoldingDetail symbol={h.symbol} summary={h} />
                 </CardContent>
               )}
