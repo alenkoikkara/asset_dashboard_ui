@@ -1,0 +1,66 @@
+name: deploy frontend
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - 'tailwind.config.ts'
+      - '.github/workflows/frontend.yml'
+    types: [closed]
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.title, 'v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build-prod
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      - name: Check built files
+        run: ls -la dist
+
+      - name: Install cloudflared
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/
+
+      - name: Setup SSH key and config
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          cat <<EOF > ~/.ssh/config
+          Host sshpi
+            HostName sshpi.alenkoikkara.com
+            User charlie
+            IdentityFile ~/.ssh/id_rsa
+            ProxyCommand cloudflared access tcp --hostname %h
+            StrictHostKeyChecking no
+          EOF
+
+      - name: Deploy to Pi
+        run: |
+          ssh sshpi "rm -rf /home/charlie/docker-data/memento/ui && mkdir -p /home/charlie/docker-data/memento/ui"
+          scp -r dist/. sshpi:/home/charlie/docker-data/memento/ui
