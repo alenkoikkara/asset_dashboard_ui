@@ -62,5 +62,5 @@ jobs:
 
       - name: Deploy to Pi
         run: |
-          ssh sshpi "rm -rf /home/charlie/docker-data/memento/ui && mkdir -p /home/charlie/docker-data/memento/ui"
-          scp -r dist/. sshpi:/home/charlie/docker-data/memento/ui
+          ssh sshpi "rm -rf /home/charlie/docker-data/asset-dashboard && mkdir -p /home/charlie/docker-data/asset-dashboard"
+          scp -r dist/. sshpi:/home/charlie/docker-data/asset-dashboard
