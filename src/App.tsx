@@ -4,6 +4,7 @@ import KPICards from '@/components/KPICards'
 import SectorChart from '@/components/SectorChart'
 import PnLChart from '@/components/PnLChart'
 import HoldingsList from '@/components/HoldingsList'
+import BrokerCard from '@/components/BrokerCard'
 import { Separator } from '@/components/ui/separator'
 import { api } from '@/lib/api'
 
@@ -72,7 +73,12 @@ export default function App() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Asset Dashboard</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Last updated: {portfolio.last_updated}
+            Last updated:{' '}
+            {new Date(portfolio.last_updated).toLocaleString('en-IN', {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+              timeZone: 'Asia/Kolkata',
+            })}
           </p>
         </div>
 
@@ -82,9 +88,10 @@ export default function App() {
         <Separator />
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <SectorChart data={portfolio.sector_allocation} />
           <PnLChart data={portfolio.pnl_by_stock} />
+          <BrokerCard data={portfolio.broker_allocation} />
         </div>
 
         <Separator />

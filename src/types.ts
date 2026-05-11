@@ -17,11 +17,20 @@ export interface PnLByStock {
   total_unrealized_pnl_pct: number
 }
 
+export interface BrokerAllocation {
+  broker: string
+  invested: number
+  current_value: number
+  pnl: number
+  pnl_pct: number
+}
+
 export interface PortfolioData {
   kpis: KPIs
   last_updated: string
   sector_allocation: SectorAllocation[]
   pnl_by_stock: PnLByStock[]
+  broker_allocation: BrokerAllocation[]
 }
 
 export interface HoldingSummary {
